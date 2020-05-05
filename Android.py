@@ -1,6 +1,12 @@
 from enum import Enum
 from dotmap import DotMap
+from dataclasses import dataclass
 import json
+
+@dataclass
+class Coords:
+    x: int
+    y: int
 
 class Movement(Enum):
     LEFT = -1
@@ -27,7 +33,7 @@ class Android:
     @classmethod
     def LaunchBot(self, position, facing, area):
         # robot must be positioned on the asteroid
-        if position[0] >= area[0] or position[1] >= area[1] :
+        if position.x >= area.x or position.y >= area.y:
             raise ValueError()
 
         self.position = position
@@ -56,10 +62,12 @@ class Android:
     def Move(self, movement):
         # TODO move functions should be smaller
         if movement == Movement.RIGHT or movement == Movement.LEFT:
+            moves = range(5)
+
             self.facing += movement
             if self.facing == 0: self.facing == Bearing.WEST
             if self.facing == 5: self.facing == Bearing.EAST
         elif movement == Movement.FORWARD:
-            self.position[0] += MOVEMENT[movement][0]
-            self.position[2] += MOVEMENT[movement][1]
+            self.position[0] += movement
+            self.position[1] += movement
         
