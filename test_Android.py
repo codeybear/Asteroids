@@ -7,5 +7,9 @@ def test_Instantiate():
     
 def test_Instantiate_invalid_params():
     with pytest.raises(ValueError):
-        Android.Android((7, 9), Android.Bearing.NORTH, (5,6))
+        Android.Android((5, 6), Android.Bearing.NORTH, (5,6))
     
+def test_LoadInput_CheckForAsteroid():
+    commands = Parse.LoadInputs(os.path.join(cwd, "instructions.txt"))
+    command = command[0]
+    assert command.type == "asteroid"
