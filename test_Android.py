@@ -22,6 +22,18 @@ def test_LoadInput_CheckForAsteroid():
 
 def test_MoveValid():
     android = Android.Android()
-    android.LaunchBot((2, 2), Android.Bearing.NORTH, (6,6))
-    android.Move(Android.Movement.FORWARD)
+    android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))
+    android.Move(Android.Movement.LEFT)
     assert android.position == (3, 2)
+
+def test_MoveLeftValid():
+    android = Android.Android()
+    android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))
+    android.Move(Android.Movement.LEFT)
+    assert android.facing == Android.Bearing.WEST
+
+def test_MoveRightValid():
+    android = Android.Android()
+    android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))
+    android.Move(Android.Movement.RIGHT)
+    assert android.facing == Android.Bearing.EAST

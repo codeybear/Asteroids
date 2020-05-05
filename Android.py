@@ -62,11 +62,11 @@ class Android:
     def Move(self, movement):
         # TODO move functions should be smaller
         if movement == Movement.RIGHT or movement == Movement.LEFT:
-            moves = range(5)
-
-            self.facing += movement
-            if self.facing == 0: self.facing == Bearing.WEST
-            if self.facing == 5: self.facing == Bearing.EAST
+            # moves = [range(5)]
+            result = self.facing.value + movement.value
+            if result == 0: result = 4
+            if result == 5: result = 1
+            self.facing = Bearing(result)
         elif movement == Movement.FORWARD:
             self.position[0] += movement
             self.position[1] += movement
