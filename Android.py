@@ -1,4 +1,5 @@
 from enum import Enum
+from dotmap import DotMap
 import json
 
 class Movement(Enum):
@@ -21,7 +22,10 @@ class Android:
 
     MOVEMENT = {}
 
-    def __init__(self, position, facing, area):
+    # def __init__(self, position, facing, area):
+
+    @classmethod
+    def LaunchBot(self, position, facing, area):
         # robot must be positioned on the asteroid
         if position[0] >= area[0] or position[1] >= area[1] :
             raise ValueError()
@@ -39,17 +43,17 @@ class Android:
     #     pass
 
     @classmethod
-    def LoadInputs(self, location):
+    def RunCommandsFromFile(self, location):
         commands = []
 
         with open(location, 'r') as input:
             for line in input:
                 command = json.loads(line)
-                commands.append(command)
+                commands.append(DotMap(command))
         
         return commands
 
-    def Turn(self, movement):
+    def Move(self, movement):
         # TODO move functions should be smaller
         if movement == Movement.RIGHT or movement == Movement.LEFT:
             self.facing += movement
@@ -58,8 +62,4 @@ class Android:
         elif movement == Movement.FORWARD:
             self.position[0] += MOVEMENT[movement][0]
             self.position[2] += MOVEMENT[movement][1]
-
-    def Move(self):
-        pass
-
         
