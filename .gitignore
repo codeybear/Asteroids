@@ -1,3 +1,5 @@
 .vscode/launch.json
 .vscode/settings.json
 __pycache__/Android.cpython-37.pyc
+.pytest_cache/
+asteroid/
