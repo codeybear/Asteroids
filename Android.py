@@ -20,15 +20,8 @@ class Bearing(Enum):
     WEST = 4
 
 class Android:
-    # TODO convert to a dict and lookup by Bearing
-    MOVE_NORTH = (0, 1)
-    MOVE_EAST = (1, 0)
-    MOVE_SOUTH = (0, -1)
-    MOVE_WEST = (-1, 0)
-
-    MOVEMENT = {}
-
-    # def __init__(self, position, facing, area):
+    # tuples could really be coords
+    MOVEMENT = {1 : (0, 1), 2 : (1, 0), 3 : (0, -1), 4 : (-1, 0)} 
 
     @classmethod
     def LaunchBot(self, position, facing, area):
@@ -45,9 +38,6 @@ class Android:
         for command in commands:
             RunCommand(command)
 
-    # def RunCommand(self, command):
-    #     pass
-
     @classmethod
     def RunCommandsFromFile(self, location):
         commands = []
@@ -60,14 +50,15 @@ class Android:
         return commands
 
     def Move(self, movement):
-        # TODO move functions should be smaller
         if movement == Movement.RIGHT or movement == Movement.LEFT:
-            # moves = [range(5)]
             result = self.facing.value + movement.value
             if result == 0: result = 4
             if result == 5: result = 1
             self.facing = Bearing(result)
         elif movement == Movement.FORWARD:
-            self.position[0] += movement
-            self.position[1] += movement
-        
+            x = self.position.x + self.MOVEMENT[self.facing.value][0]
+            y = self.position.y + self.MOVEMENT[self.facing.value][1]
+
+            if x < self.area.x or y < self.area.y:
+                self.position.x = x
+                self.position.y = y

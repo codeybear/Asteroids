@@ -20,11 +20,11 @@ def test_LoadInput_CheckForAsteroid():
     command = commands[0]
     assert command.type == "asteroid"
 
-def test_MoveValid():
+def test_MoveForwardValid():
     android = Android.Android()
     android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))
-    android.Move(Android.Movement.LEFT)
-    assert android.position == (3, 2)
+    android.Move(Android.Movement.FORWARD)
+    assert android.position == Android.Coords(2, 3)
 
 def test_MoveLeftValid():
     android = Android.Android()
