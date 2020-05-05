@@ -21,7 +21,7 @@ class Bearing(Enum):
 
 class Android:
     # tuples could really be coords
-    MOVEMENT = {1 : (0, 1), 2 : (1, 0), 3 : (0, -1), 4 : (-1, 0)} 
+    MOVEMENT = {1 : Coords(0, 1), 2 : Coords(1, 0), 3 : Coords(0, -1), 4 : Coords(-1, 0)} 
 
     @classmethod
     def LaunchBot(self, position, facing, area):
@@ -56,8 +56,8 @@ class Android:
             if result == 5: result = 1
             self.facing = Bearing(result)
         elif movement == Movement.FORWARD:
-            x = self.position.x + self.MOVEMENT[self.facing.value][0]
-            y = self.position.y + self.MOVEMENT[self.facing.value][1]
+            x = self.position.x + self.MOVEMENT[self.facing.value].x
+            y = self.position.y + self.MOVEMENT[self.facing.value].y
 
             if x < self.area.x or y < self.area.y:
                 self.position.x = x
