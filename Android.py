@@ -22,6 +22,7 @@ class Bearing(Enum):
 class Android:
     # movement in the x and y direction for each of the bearings
     MOVEMENT = {Bearing.NORTH : Coords(0, 1), Bearing.EAST : Coords(1, 0), Bearing.SOUTH : Coords(0, -1), Bearing.WEST : Coords(-1, 0)} 
+    MOVEMENT_MAP = { "turn-left" : "LEFT", "turn-right" : "RIGHT", "move-forward" : "FORWARD" }
 
     @classmethod
     def LaunchBot(self, position, facing, area):
@@ -41,13 +42,28 @@ class Android:
 
     @classmethod
     def RunCommandsFromFile(self, location):
+        commands = Android.LoadCommands(location)
+        area = commands[0].size
+
+        for command in commands:
+            if command.type == "new-robot":
+                self.LaunchBot(Coords(command.position.x, command.position.y), Bearing[command.bearing.upper()], Coords(area.x, area.y))
+                # TODO need to store final bot positions                
+            if command.type == "move":
+                move = self.MOVEMENT_MAP[command.movement]
+                self.Move(Movement[move])    
+
+        return commands
+
+    @classmethod
+    def LoadCommands(self, location):
         commands = []
 
         with open(location, 'r') as input:
             for line in input:
                 command = json.loads(line)
                 commands.append(DotMap(command))
-        
+
         if commands[0].type != "asteroid":
             ValueError("First command must define the asteroid")
 
