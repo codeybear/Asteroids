@@ -48,6 +48,12 @@ class Android:
                 command = json.loads(line)
                 commands.append(DotMap(command))
         
+        if commands[0].type != "asteroid":
+            ValueError("First command must define the asteroid")
+
+        if commands[1].type != "new-robot":
+            ValueError("First command must define the asteroid")
+
         return commands
 
     @classmethod
