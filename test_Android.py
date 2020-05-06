@@ -20,25 +20,43 @@ def test_LoadInput_CheckForAsteroid():
     command = commands[0]
     assert command.type == "asteroid"
 
-def test_MoveForwardValid():
+def test_MoveForwardValidNorth():
     android = Android.Android()
     android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))
     android.Move(Android.Movement.FORWARD)
     assert android.position == Android.Coords(2, 3)
 
-def test_MoveForwardInvalid():
+def test_MoveForwardValidEast():
+    android = Android.Android()
+    android.LaunchBot(Android.Coords(2, 2), Android.Bearing.EAST, Android.Coords(6,6))
+    android.Move(Android.Movement.FORWARD)
+    assert android.position == Android.Coords(3, 2)
+
+def test_MoveForwardInvalidTop():
     android = Android.Android()
     android.LaunchBot(Android.Coords(0, 5), Android.Bearing.NORTH, Android.Coords(6,6))
     with pytest.raises(ValueError):
         android.Move(Android.Movement.FORWARD)
 
-def test_MoveLeftValid():
+def test_MoveForwardInvalidBottom():
+    android = Android.Android()
+    android.LaunchBot(Android.Coords(0, 0), Android.Bearing.SOUTH, Android.Coords(6,6))
+    with pytest.raises(ValueError):
+        android.Move(Android.Movement.FORWARD)
+
+def test_MoveForwardInvalidEast():
+    android = Android.Android()
+    android.LaunchBot(Android.Coords(5, 0), Android.Bearing.EAST, Android.Coords(6,6))
+    with pytest.raises(ValueError):
+        android.Move(Android.Movement.FORWARD)
+
+def test_TurnLeftValid():
     android = Android.Android()
     android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))
     android.Move(Android.Movement.LEFT)
     assert android.facing == Android.Bearing.WEST
 
-def test_MoveRightValid():
+def test_TurnRightValid():
     android = Android.Android()
     android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))
     android.Move(Android.Movement.RIGHT)

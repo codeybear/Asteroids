@@ -58,11 +58,28 @@ class Android:
             result = turns[result]
             self.facing = Bearing(result)
         elif movement == Movement.FORWARD:
-            x = self.position.x + self.MOVEMENT[self.facing.value].x
-            y = self.position.y + self.MOVEMENT[self.facing.value].y
+            Android.ForwardMove()
 
-            if x < self.area.x and y < self.area.y:
-                self.position.x = x
-                self.position.y = y
-            else:
-                raise ValueError()
+    @classmethod
+    def ForwardMove(self):
+        x = self.position.x + self.MOVEMENT[self.facing].x
+        y = self.position.y + self.MOVEMENT[self.facing].y
+
+        if self.CheckBounds(x, y):
+            self.position.x = x
+            self.position.y = y
+        else:
+            raise ValueError()
+    
+    @classmethod
+    def CheckBounds(self, x, y):
+        valid = True
+        if x >= self.area.x or y >= self.area.y:
+            valid = False
+
+        if x < 0 or y < 0:
+            valid = False
+
+        return valid
+    
+
