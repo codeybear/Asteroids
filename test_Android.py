@@ -26,6 +26,12 @@ def test_MoveForwardValid():
     android.Move(Android.Movement.FORWARD)
     assert android.position == Android.Coords(2, 3)
 
+def test_MoveForwardInvalid():
+    android = Android.Android()
+    android.LaunchBot(Android.Coords(0, 5), Android.Bearing.NORTH, Android.Coords(6,6))
+    with pytest.raises(ValueError):
+        android.Move(Android.Movement.FORWARD)
+
 def test_MoveLeftValid():
     android = Android.Android()
     android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))

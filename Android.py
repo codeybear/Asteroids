@@ -20,8 +20,8 @@ class Bearing(Enum):
     WEST = 4
 
 class Android:
-    # tuples could really be coords
-    MOVEMENT = {1 : Coords(0, 1), 2 : Coords(1, 0), 3 : Coords(0, -1), 4 : Coords(-1, 0)} 
+    # movement in the x and y direction for each of the bearings
+    MOVEMENT = {Bearing.NORTH : Coords(0, 1), Bearing.EAST : Coords(1, 0), Bearing.SOUTH : Coords(0, -1), Bearing.WEST : Coords(-1, 0)} 
 
     @classmethod
     def LaunchBot(self, position, facing, area):
@@ -33,6 +33,7 @@ class Android:
         self.facing = facing
         self.area = area
 
+    @classmethod
     def RunInstructions(self, location):
         commands = LoadInputs(location)
         for command in commands:
@@ -49,16 +50,19 @@ class Android:
         
         return commands
 
+    @classmethod
     def Move(self, movement):
         if movement == Movement.RIGHT or movement == Movement.LEFT:
+            turns = [4, 1, 2, 3, 4, 1] # create a list of valid directions that wraps around
             result = self.facing.value + movement.value
-            if result == 0: result = 4
-            if result == 5: result = 1
+            result = turns[result]
             self.facing = Bearing(result)
         elif movement == Movement.FORWARD:
             x = self.position.x + self.MOVEMENT[self.facing.value].x
             y = self.position.y + self.MOVEMENT[self.facing.value].y
 
-            if x < self.area.x or y < self.area.y:
+            if x < self.area.x and y < self.area.y:
                 self.position.x = x
                 self.position.y = y
+            else:
+                raise ValueError()
