@@ -20,7 +20,12 @@ def test_RunCommandsFromFile():
     android = Android.Android()
     commands = android.RunCommandsFromFile(path)
     assert commands[0].position.x == 1 and commands[0].position.y == 3 and commands[1].position.x == 5 and commands[1].position.y == 1
-    
+
+def test_RunCommandsFromFileandOutput():
+    android = Android.Android()
+    commands = android.RunCommandsFromFile(path)
+    android.SendOutput(commands)
+
 def test_MoveForwardValidNorth():
     android = Android.Android()
     android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))

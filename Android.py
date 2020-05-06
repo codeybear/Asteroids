@@ -1,7 +1,7 @@
 from enum import Enum
 from dotmap import DotMap
 from dataclasses import dataclass
-import json
+import jsons
 
 @dataclass
 class Coords:
@@ -72,12 +72,24 @@ class Android:
         return outCommands
 
     @classmethod
+    def SendOutput(self, commands):
+        output = ""
+
+        for command in commands:
+            # TODO get rid of bearing. and make the rest lower case for the bearing key
+            # '{"bearing": "Bearing.NORTH", "position": {"x": 1, "y": 3}, "type": "robot"}{"bearing": "Bearing.EAST", "position": {"x": 5, "y": 1}, "type": "robot"}
+            # TODO redirect stdout
+            output += jsons.dumps(command)
+
+        print(output)
+
+    @classmethod
     def LoadCommands(self, location):
         commands = []
 
         with open(location, 'r') as input:
             for line in input:
-                command = json.loads(line)
+                command = jsons.loads(line)
                 commands.append(DotMap(command))
 
         if commands[0].type != "asteroid":
