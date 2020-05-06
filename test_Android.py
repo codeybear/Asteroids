@@ -14,20 +14,13 @@ def test_Instantiate_invalid_params():
     android = Android.Android()
 
     with pytest.raises(ValueError):
-        android.LaunchBot(Android.Coords(5, 6), Android.Bearing.NORTH, Android.Coords(5,6))
+        android.LaunchBot(Android.Coords(5, 6), Android.Bearing.NORTH, Android.Coords(4,5))
     
-def test_LoadInput_CheckForAsteroid():
-    android = Android.Android()
-    cwd = os.getcwd()
-    with pytest.raises(ValueError):
-        commands = android.RunCommandsFromFile(path)
-
 def test_RunCommandsFromFile():
     android = Android.Android()
     commands = android.RunCommandsFromFile(path)
-    # TODO check the output commands here
-    assert commands[0].type == "asteroid"
-
+    assert commands[0].position.x == 1 and commands[0].position.y == 3 and commands[1].position.x == 5 and commands[1].position.y == 1
+    
 def test_MoveForwardValidNorth():
     android = Android.Android()
     android.LaunchBot(Android.Coords(2, 2), Android.Bearing.NORTH, Android.Coords(6,6))
@@ -42,7 +35,7 @@ def test_MoveForwardValidEast():
 
 def test_MoveForwardInvalidTop():
     android = Android.Android()
-    android.LaunchBot(Android.Coords(0, 5), Android.Bearing.NORTH, Android.Coords(6,6))
+    android.LaunchBot(Android.Coords(0, 5), Android.Bearing.NORTH, Android.Coords(5,5))
     with pytest.raises(ValueError):
         android.Move(Android.Movement.FORWARD)
 
@@ -54,7 +47,7 @@ def test_MoveForwardInvalidBottom():
 
 def test_MoveForwardInvalidEast():
     android = Android.Android()
-    android.LaunchBot(Android.Coords(5, 0), Android.Bearing.EAST, Android.Coords(6,6))
+    android.LaunchBot(Android.Coords(5, 0), Android.Bearing.EAST, Android.Coords(5, 5))
     with pytest.raises(ValueError):
         android.Move(Android.Movement.FORWARD)
 

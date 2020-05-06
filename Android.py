@@ -8,6 +8,12 @@ class Coords:
     x: int
     y: int
 
+@dataclass
+class Output:
+    type: str
+    position: Coords
+    bearing: str
+
 class Movement(Enum):
     LEFT = -1
     RIGHT = 1
@@ -25,9 +31,15 @@ class Android:
     MOVEMENT_MAP = { "turn-left" : "LEFT", "turn-right" : "RIGHT", "move-forward" : "FORWARD" }
 
     @classmethod
+    def __init__(self):
+        self.position = None
+        self.facing = None
+        self.area = None
+
+    @classmethod
     def LaunchBot(self, position, facing, area):
         # robot must be positioned on the asteroid
-        if position.x >= area.x or position.y >= area.y:
+        if position.x > area.x or position.y > area.y:
             raise ValueError()
 
         self.position = position
@@ -44,15 +56,20 @@ class Android:
     def RunCommandsFromFile(self, location):
         commands = Android.LoadCommands(location)
         area = commands[0].size
+        outCommands = []
 
         for command in commands:
             if command.type == "new-robot":
+                if self.position is not None:
+                    outCommands.append(Output("robot", Coords(self.position.x, self.position.y), self.facing))
+
                 self.LaunchBot(Coords(command.position.x, command.position.y), Bearing[command.bearing.upper()], Coords(area.x, area.y))
             if command.type == "move":
                 move = self.MOVEMENT_MAP[command.movement]
                 self.Move(Movement[move])    
 
-        return commands
+        outCommands.append(Output("robot", Coords(self.position.x, self.position.y), self.facing))
+        return outCommands
 
     @classmethod
     def LoadCommands(self, location):
@@ -67,7 +84,7 @@ class Android:
             ValueError("First command must define the asteroid")
 
         if commands[1].type != "new-robot":
-            ValueError("First command must define the asteroid")
+            ValueError("Sedond command must define an android")
 
         return commands
 
