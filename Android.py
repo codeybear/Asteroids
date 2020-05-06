@@ -48,7 +48,6 @@ class Android:
         for command in commands:
             if command.type == "new-robot":
                 self.LaunchBot(Coords(command.position.x, command.position.y), Bearing[command.bearing.upper()], Coords(area.x, area.y))
-                # TODO need to store final bot positions                
             if command.type == "move":
                 move = self.MOVEMENT_MAP[command.movement]
                 self.Move(Movement[move])    
@@ -75,12 +74,16 @@ class Android:
     @classmethod
     def Move(self, movement):
         if movement == Movement.RIGHT or movement == Movement.LEFT:
-            turns = [4, 1, 2, 3, 4, 1] # create a list of valid directions that wraps around
-            result = self.facing.value + movement.value
-            result = turns[result]
-            self.facing = Bearing(result)
+            Android.Rotate(movement)
         elif movement == Movement.FORWARD:
             Android.ForwardMove()
+
+    @classmethod
+    def Rotate(self, movement):
+        turns = [4, 1, 2, 3, 4, 1] # create a list of valid directions that wraps around
+        result = self.facing.value + movement.value
+        result = turns[result]
+        self.facing = Bearing(result)
 
     @classmethod
     def ForwardMove(self):
@@ -96,7 +99,7 @@ class Android:
     @classmethod
     def CheckBounds(self, x, y):
         valid = True
-        if x >= self.area.x or y >= self.area.y:
+        if x > self.area.x or y > self.area.y:
             valid = False
 
         if x < 0 or y < 0:

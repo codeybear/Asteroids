@@ -22,9 +22,10 @@ def test_LoadInput_CheckForAsteroid():
     with pytest.raises(ValueError):
         commands = android.RunCommandsFromFile(path)
 
-def test_LoadInput():
+def test_RunCommandsFromFile():
     android = Android.Android()
     commands = android.RunCommandsFromFile(path)
+    # TODO check the output commands here
     assert commands[0].type == "asteroid"
 
 def test_MoveForwardValidNorth():
