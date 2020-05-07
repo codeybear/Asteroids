@@ -29,6 +29,7 @@ class Bearing(Enum):
 class Android:
     # movement in the x and y direction for each of the bearings
     MOVEMENT = {Bearing.NORTH : Coords(0, 1), Bearing.EAST : Coords(1, 0), Bearing.SOUTH : Coords(0, -1), Bearing.WEST : Coords(-1, 0)} 
+    # mappings from JSON to Bearing Enum
     MOVEMENT_MAP = { "turn-left" : "LEFT", "turn-right" : "RIGHT", "move-forward" : "FORWARD" }
 
     @classmethod
@@ -48,20 +49,15 @@ class Android:
         self.area = area
 
     @classmethod
-    def RunInstructions(self, location):
-        commands = LoadInputs(location)
-        for command in commands:
-            RunCommand(command)
-
-    @classmethod
     def RunCommandsFromFile(self, location):
+        ### Load and run files from valid JSON file ###
         commands = Android.LoadCommands(location)
         area = commands[0].size
         outCommands = []
 
         for command in commands:
             if command.type == "new-robot":
-                if self.position is not None:
+                if self.position is not None:   # store the final position of the android
                     outCommands.append(Output("robot", Coords(self.position.x, self.position.y), self.facing))
 
                 self.LaunchBot(Coords(command.position.x, command.position.y), Bearing[command.bearing.upper()], Coords(area.x, area.y))
@@ -74,6 +70,7 @@ class Android:
 
     @classmethod
     def SendOutput(self, commands):
+        """ Send final robot positions to output """
         output = ""
 
         for command in commands:
@@ -84,6 +81,7 @@ class Android:
 
     @classmethod
     def LoadCommands(self, location):
+        """ Load commands from specified JSON file """
         commands = []
 
         with open(location, 'r') as input:
@@ -108,7 +106,7 @@ class Android:
 
     @classmethod
     def Rotate(self, movement):
-        turns = [4, 1, 2, 3, 4, 1] # create a list of valid directions that wraps around
+        turns = [4, 1, 2, 3, 4, 1] # create a list of valid bearings that wraps around
         result = self.facing.value + movement.value
         result = turns[result]
         self.facing = Bearing(result)
@@ -118,7 +116,7 @@ class Android:
         x = self.position.x + self.MOVEMENT[self.facing].x
         y = self.position.y + self.MOVEMENT[self.facing].y
 
-        if self.CheckBounds(x, y):
+        if self.CheckBounds(x, y):  
             self.position.x = x
             self.position.y = y
         else:
@@ -126,6 +124,7 @@ class Android:
     
     @classmethod
     def CheckBounds(self, x, y):
+        """ make sure the position is within the bounds of the asteroid """
         valid = True
         if x > self.area.x or y > self.area.y:
             valid = False
