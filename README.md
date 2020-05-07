@@ -93,3 +93,5 @@ $ python robots.py instructions.txt
 {"type": "robot", "position": {"x": 1, "y": 3}, "bearing": "north"}
 {"type": "robot", "position": {"x": 5, "y": 1}, "bearing": "east"}
 ```
+{"bearing": "north", "position": {"x": 1, "y": 3}, "type": "robot"}
+{"bearing": "east", "position": {"x": 5, "y": 1}, "type": "robot"}

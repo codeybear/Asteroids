@@ -21,10 +21,12 @@ def test_RunCommandsFromFile():
     commands = android.RunCommandsFromFile(path)
     assert commands[0].position.x == 1 and commands[0].position.y == 3 and commands[1].position.x == 5 and commands[1].position.y == 1
 
-def test_RunCommandsFromFileandOutput():
+def test_RunCommandsFromFileandOutput(capsys):
     android = Android.Android()
     commands = android.RunCommandsFromFile(path)
     android.SendOutput(commands)
+    captured = capsys.readouterr()
+    assert """{"bearing": "north", "position": {"x": 1, "y": 3}, "type": "robot"}""" in captured.out
 
 def test_MoveForwardValidNorth():
     android = Android.Android()
