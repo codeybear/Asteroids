@@ -2,6 +2,7 @@ from enum import Enum
 from dotmap import DotMap
 from dataclasses import dataclass
 import jsons
+import os
 
 @dataclass
 class Coords:
@@ -76,11 +77,9 @@ class Android:
         output = ""
 
         for command in commands:
-            # TODO get rid of bearing. and make the rest lower case for the bearing key
-            # '{"bearing": "Bearing.NORTH", "position": {"x": 1, "y": 3}, "type": "robot"}{"bearing": "Bearing.EAST", "position": {"x": 5, "y": 1}, "type": "robot"}
-            # TODO redirect stdout
-            output += jsons.dumps(command)
+            output += jsons.dumps(command) + os.linesep
 
+        output = output.replace("Bearing.", "").lower()
         print(output)
 
     @classmethod
