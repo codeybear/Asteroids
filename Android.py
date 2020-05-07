@@ -9,6 +9,7 @@ class Coords:
     x: int
     y: int
 
+# output structure
 @dataclass
 class Output:
     type: str
