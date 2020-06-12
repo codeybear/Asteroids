@@ -33,13 +33,11 @@ class Android:
     # mappings from JSON to Bearing Enum
     MOVEMENT_MAP = { "turn-left" : "LEFT", "turn-right" : "RIGHT", "move-forward" : "FORWARD" }
 
-    @classmethod
     def __init__(self):
         self.position = None
         self.facing = None
         self.area = None
 
-    @classmethod
     def LaunchBot(self, position, facing, area):
         # robot must be positioned on the asteroid
         if position.x > area.x or position.y > area.y:
@@ -49,10 +47,9 @@ class Android:
         self.facing = facing
         self.area = area
 
-    @classmethod
     def RunCommandsFromFile(self, location):
         ### Load and run files from valid JSON file ###
-        commands = Android.LoadCommands(location)
+        commands = self.LoadCommands(location)
         area = commands[0].size
         outCommands = []
 
@@ -69,7 +66,6 @@ class Android:
         outCommands.append(Output("robot", Coords(self.position.x, self.position.y), self.facing))
         return outCommands
 
-    @classmethod
     def SendOutput(self, commands):
         """ Send final robot positions to output """
         output = ""
@@ -80,7 +76,6 @@ class Android:
         output = output.replace("Bearing.", "").lower()
         print(output)
 
-    @classmethod
     def LoadCommands(self, location):
         """ Load commands from specified JSON file """
         commands = []
@@ -94,25 +89,22 @@ class Android:
             ValueError("First command must define the asteroid")
 
         if commands[1].type != "new-robot":
-            ValueError("Sedond command must define an android")
+            ValueError("Second command must define an android")
 
         return commands
 
-    @classmethod
     def Move(self, movement):
         if movement == Movement.RIGHT or movement == Movement.LEFT:
-            Android.Rotate(movement)
+            self.Rotate(movement)
         elif movement == Movement.FORWARD:
-            Android.ForwardMove()
+            self.ForwardMove()
 
-    @classmethod
     def Rotate(self, movement):
         turns = [4, 1, 2, 3, 4, 1] # create a list of valid bearings that wraps around
         result = self.facing.value + movement.value
         result = turns[result]
         self.facing = Bearing(result)
 
-    @classmethod
     def ForwardMove(self):
         x = self.position.x + self.MOVEMENT[self.facing].x
         y = self.position.y + self.MOVEMENT[self.facing].y
@@ -123,7 +115,6 @@ class Android:
         else:
             raise ValueError()
     
-    @classmethod
     def CheckBounds(self, x, y):
         """ make sure the position is within the bounds of the asteroid """
         valid = True

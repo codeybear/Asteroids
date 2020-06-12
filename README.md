@@ -1,13 +1,5 @@
 # Asteroid Robots
 
-
-## Introduction
-HI! Thanks for applying to join Black Cow Technology. As part of the process we'd like you to complete this short take-home task. It shouldn't take very long, certainly not more than a few hours.
-
-Please treat this task as though it were a real project and do everything just as you normally would (think source control). 
-Additionally, please try to apply the principles of [test-driven development](https://en.wikipedia.org/wiki/Test-driven_development) using [pytest](https://docs.pytest.org/en/latest/).
-
-
 ## Show Me The Robots!
 The European Space Agency (ESA) is planning to send some robots to an asteroid. The surface of the asteroid is represented as a rectangular two dimensional grid.
 
